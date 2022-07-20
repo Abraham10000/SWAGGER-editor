@@ -1,0 +1,417 @@
+openapi: 3.0.1
+info:
+  title: PLAZZA'S API
+  description: 'Global description of Plazza''s API'
+  version: 1.0.0
+servers:
+  - url: https://STD21017.com
+tags:
+  - name : Projection
+paths:
+  /film:
+    get:
+      tags:
+        - Film
+      operationId: getFIlmd
+      summary: Get all films
+      description: Get all films with details
+      responses:
+        200:
+          description: List of film
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Film'
+        400:
+          description: Bad request
+    post:
+      tags:
+        - Film
+      operationId: createFilm
+      summary : Add new film
+      description: Add  new film
+      requestBody:
+        description: Student to be added    
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateFilm'
+        required: true
+      responses:
+        200:
+          description: List of film
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Film'
+        400:
+          description: Bad request
+
+  /film/{id}:
+    get:
+      tags:
+        - Film
+      operationId: getFilmId
+      summary: Get specified film 
+      description: Get all specified film with details
+      parameters:
+        - name: id
+          in: path
+          schema :
+            type : integer
+          required : true
+      responses:
+        200:
+          description: List of films
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Film'
+        400:
+          description: Bad request
+          
+    patch :
+      tags :
+        - Film 
+      summary : Update film informations
+      description : Update film informations
+      parameters:
+        - name: id
+          in: path
+          schema :
+            type : integer
+          required : true
+      requestBody : 
+        description : Update film 
+        content :
+          application/json:
+            schema :
+              type : array
+              items : 
+                $ref: '#/components/schemas/Film'
+            examples:
+              changeTitle : 
+                value : 
+                  id: 1
+                  title : "Titanic"
+              changeDescription:
+                value:
+                  id: 1
+                  description: "L'shistoire entre deux amants sur un bâteau..."
+              addRéalisateur:
+                value: 
+                  id: 1
+                  Réalisateur:
+                  - compagnie: "Warner Bros"
+              chnageDate :
+                value : 
+                  id : 1 
+                  date_de_sortie : "2002-04-14"
+      responses :
+        200 :
+          description : Update done
+          content :
+            application/json :
+              schema : 
+                $ref : '#/components/schemas/Film'
+
+    delete:
+      tags:
+        - Film
+      summary : Delete specified film
+      description : Delete all or one film
+      parameters:
+        - name : id
+          in: path
+          schema :
+            type : integer
+          required: true
+      responses:
+        200:
+          description: Resources deleted
+        400:
+          description: Bad request
+
+  /salle:
+    get:
+      tags:
+        - Salle
+      operationId: getSalle
+      summary: Avoir tous les salles
+      description: Voir tous les salles avec détails
+      parameters:
+        - name: id
+          in: query
+          schema :
+            type : integer
+          required : true
+      responses:
+        200:
+          description: Liste des salles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Salle'
+        400:
+          description: Bad request
+    post:
+      tags:
+        - Salle
+      operationId: createSAlle
+      summary : Ajouter un nouveau salle 
+      description: Ajouter un nouveau salle
+      requestBody:
+        description: nouveau salle
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSalle'
+        required: true
+      responses:
+        200:
+          description: Liste des salles  
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Salle'
+        400:
+          description: Bad request
+  /salle/{id}:
+    get:
+      tags:
+        - Salle
+      operationId: getSalleId
+      summary: Get specified Salle
+      description: Get all salle with details
+      parameters:
+        - name: id
+          in: path
+          schema :
+            type : integer
+          required : true
+      responses:
+        200:
+          description: List of SAlle
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Salle'
+        400:
+          description: Bad request
+
+    delete:
+      tags:
+        - Salle
+      summary : Delete specified salle
+      description : Delete all or one salle
+      parameters:
+        - name : id
+          in: path
+          schema :
+            type : integer
+          required: true
+      responses:
+        200:
+          description: Resources deleted
+        400:
+          description: Bad request
+  /projection:
+    get:
+      tags:
+        - Projection
+      operationId: getProjection
+      summary: Avoir tous les projections en salles
+      description: Voir tous les projections avec détails
+      parameters:
+        - name: id
+          in: query
+          schema :
+            type : integer
+          required : true
+      responses:
+        200:
+          description: Liste des projection
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Projection'
+        400:
+          description: Bad request
+    post:
+      tags:
+        - Projection
+      operationId: createProjection
+      summary : Ajouter un nouveau Projection 
+      description: Ajouter un nouveau projection
+      requestBody:
+        description: nouveau projection
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProjection'
+        required: true
+      responses:
+        200:
+          description: Liste des projections  
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Projection'
+        400:
+          description: Bad request
+  /projection/{id}:
+    get:
+      tags:
+        - Projection
+      operationId: getProjectionId
+      summary: Get specified projection
+      description: Get all projection with details
+      parameters:
+        - name: id
+          in: path
+          schema :
+            type : integer
+          required : true
+      responses:
+        200:
+          description: List of projection
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Projection'
+        400:
+          description: Bad request
+    patch :
+      tags :
+        - Projection 
+      summary : Update projection informations
+      description : Update projection informations
+      parameters:
+        - name: id
+          in: path
+          schema :
+            type : integer
+          required : true
+      requestBody : 
+        description : Update projection
+        content :
+          application/json:
+            schema :
+              type : array
+              items : 
+                $ref: '#/components/schemas/Projection'
+            examples:
+              changeTitle : 
+                value : 
+                  id: 1
+                  title : "Titanic"
+              salleProjection:
+                value:
+                  id: 1
+                  numéro_salle: "S2"
+              heureDiffusion :
+                value : 
+                  id : 1 
+                  heure_de_diffusion : "8H PM"
+      responses :
+        200 :
+          description : Update done
+          content :
+            application/json :
+              schema : 
+                $ref : '#/components/schemas/Projection'
+
+    delete:
+      tags:
+        - Projection
+      summary : Delete specified projection
+      description : Delete all or one projection
+      parameters:
+        - name : id
+          in: path
+          schema :
+            type : integer
+          required: true
+      responses:
+        200:
+          description: Resources deleted
+        400:
+          description: Bad request
+
+components:
+  schemas:
+    CreateFilm:
+      type: object
+      properties:
+        titre:
+          type: string
+          example: "Titanic"
+        Durée:
+          type: string
+          format: heure
+          example: "1H30"
+        Resumé :
+          type : string 
+          example : "L'histoire entre deux amants sur un bâteau..."
+        Realisateur : 
+          type : string 
+          example : "Warner Bros"
+        Date_de_sortie : 
+          type : string 
+          format : date 
+          example : "2002-04-14"
+    Film:
+      allOf:
+        - $ref: '#/components/schemas/CreateFilm'
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+    CreateSalle:
+      type: object
+      properties:
+        numero:
+          type: string
+          example : "S2"
+        capacite_d_acceuil :
+          type: integer
+          example: 10000
+    Salle :
+      allOf:
+        - $ref: '#/components/schemas/CreateSalle'
+      type: object
+      properties:
+        id:
+          type: integer
+          example : 1
+
+    CreateProjection : 
+      type : object
+      properties : 
+        film : 
+          type : string 
+          example : "Titanic"
+        salle_de_projection : 
+          type : string
+          example : "S2"
+        heure_diffusion : 
+          type : string 
+          format: heure
+          example : "8H PM"
+    Projection : 
+      allOf : 
+        - $ref: '#/components/schemas/CreateProjection'
+      type : object
+      properties: 
+        id: 
+          type : integer
+          example : 1
+        
+      

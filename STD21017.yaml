@@ -73,7 +73,49 @@ paths:
                 $ref: '#/components/schemas/Student'
         400:
           description: Bad request
-
+          
+    patch :
+      tags :
+        - Students 
+      summary : Update Student informations
+      description : Update Student informations
+      parameters:
+        - name: id
+          in: path
+          schema :
+            type : integer
+          required : true
+      requestBody : 
+        description : Update Student phone number
+        content :
+          application/json:
+            schema :
+              type : array
+              items : 
+                $ref: '#/components/schemas/Student'
+            examples:
+              changeName:
+                value:
+                  id: 1
+                  name: "Rakoto"
+              addPhoneNumber:
+                value: 
+                  id: 1
+                  number:
+                  - number: "0341234567"
+                    country_code: "+261"
+              chnageAdress :
+                value : 
+                  id : 1 
+                  adress : "III J 115 TER IVATO"
+      responses :
+        200 :
+          description : Update done
+          content :
+            application/json :
+              schema : 
+                $ref : '#/components/schemas/Student'
+     
     delete:
       tags:
         - Students
@@ -179,6 +221,15 @@ paths:
 
 components:
   schemas:
+    PhoneNumber :
+        type : object
+        properties :
+          country-code :
+            type : string 
+            example : "+261"
+          number : 
+            type : string 
+            example : "+261330212237"
     CreateStudent:
       type: object
       properties:
@@ -189,14 +240,20 @@ components:
           type: string
           format: date
           example: "2022-01-01"
+        adress : 
+          type : string 
+          example : "II J 115 BIS D Ivadry"
+        
     Student:
       allOf:
         - $ref: '#/components/schemas/CreateStudent'
+        - $ref: '#/components/schemas/PhoneNumber'
       type: object
       properties:
         id:
           type: integer
-          example: 10
+          example: 1
+
     CreateCourse:
       type: object
       properties:
