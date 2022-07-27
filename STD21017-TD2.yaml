@@ -343,6 +343,28 @@ paths:
           description: Resources deleted
         400:
           description: Bad request
+  /film_category/categorie?="action":
+    get:
+      tags:
+        - Category
+      operationId: getFilmbyCategorie
+      summary: Get film by categorie
+      description: Get all film with their category
+      parameters:
+        - name: categorie
+          in: query
+          schema :
+            type : string
+          required : true
+      responses:
+        200:
+          description: List of films with their category
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Categorie'
+        400:
+          description: Bad request
 
 components:
   schemas:
@@ -413,5 +435,27 @@ components:
         id: 
           type : integer
           example : 1
+    Categorie :
+      type : object
+      properties : 
+        categorie :
+          type : string
+          example : "action"
+        liste_de_film :
+          example : 
+              film1 :
+                titre:
+                  - $ref: '#/components/schemas/CreateFilm/properties/titre/example'
+                id :
+                  - $ref: '#/components/schemas/Film/properties/id/example'
+                durée :
+                   - $ref: '#/components/schemas/CreateFilm/properties/Durée/example'
+                resumé : 
+                   - $ref: '#/components/schemas/CreateFilm/properties/Resumé/example'
+                realisateur : 
+                   - $ref: '#/components/schemas/CreateFilm/properties/Realisateur/example'
+
+          
+        
         
       
