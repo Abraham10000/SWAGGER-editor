@@ -1,461 +1,494 @@
 openapi: 3.0.1
-info:
-  title: PLAZZA'S API
-  description: 'Global description of Plazza''s API'
+info: 
+  title: PLazza's API
+  description: 'Global description of a cinema api'
   version: 1.0.0
 servers:
-  - url: https://STD21017.com
+  - url : https://plazza.cinema.com
 tags:
-  - name : Projection
+  - name: Room 
+  - name: Movie
 paths:
-  /film:
+  /room:
     get:
       tags:
-        - Film
-      operationId: getFIlmd
-      summary: Get all films
-      description: Get all films with details
+        - Room
+      operationId: get room
+      summary: Get all rooms
+      description: Get all rooms
+      parameters : 
+        - name : page
+          in : query 
+          schema : 
+             type : integer
       responses:
-        200:
-          description: List of film
+        200: 
+          description: List of rooms
           content:
             application/json:
               schema:
                 type: array
-                items:
-                  $ref: '#/components/schemas/Film'
+                items: 
+                  $ref: '#/components/schemas/Room'
         400:
           description: Bad request
-    post:
-      tags:
-        - Film
-      operationId: createFilm
-      summary : Add new film
-      description: Add  new film
-      requestBody:
-        description: Student to be added    
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateFilm'
-        required: true
-      responses:
-        200:
-          description: List of film
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Film'
-        400:
-          description: Bad request
-
-  /film/{id}:
+    
+  /room/{id}:
     get:
       tags:
-        - Film
-      operationId: getFilmId
-      summary: Get specified film 
-      description: Get all specified film with details
+        - Room
+      summary: get a room
+      description: Get a room by id
       parameters:
-        - name: id
+        - name: Id
           in: path
-          schema :
-            type : integer
-          required : true
+          schema: 
+            type: integer
+          required: true  
       responses:
         200:
-          description: List of films
+          description: Here's your room
           content:
             application/json:
-              schema:
-                $ref: '#/components/schemas/Film'
-        400:
+              schema: 
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Room'
+        400: 
           description: Bad request
-          
-    patch :
-      tags :
-        - Film 
-      summary : Update film informations
-      description : Update film informations
-      parameters:
-        - name: id
-          in: path
-          schema :
-            type : integer
-          required : true
-      requestBody : 
-        description : Update film 
-        content :
-          application/json:
-            schema :
-              type : array
-              items : 
-                $ref: '#/components/schemas/Film'
-            examples:
-              changeTitle : 
-                value : 
-                  id: 1
-                  title : "Titanic"
-              changeDescription:
-                value:
-                  id: 1
-                  description: "L'shistoire entre deux amants sur un bâteau..."
-              addRéalisateur:
-                value: 
-                  id: 1
-                  Réalisateur:
-                  - compagnie: "Warner Bros"
-              chnageDate :
-                value : 
-                  id : 1 
-                  date_de_sortie : "2002-04-14"
-      responses :
-        200 :
-          description : Update done
-          content :
-            application/json :
-              schema : 
-                $ref : '#/components/schemas/Film'
-
-    delete:
-      tags:
-        - Film
-      summary : Delete specified film
-      description : Delete all or one film
-      parameters:
-        - name : id
-          in: path
-          schema :
-            type : integer
-          required: true
-      responses:
-        200:
-          description: Resources deleted
-        400:
-          description: Bad request
-
-  /salle:
+        404: 
+          description: Room not found
+    
+  /movie:
     get:
       tags:
-        - Salle
-      operationId: getSalle
-      summary: Avoir tous les salles
-      description: Voir tous les salles avec détails
+        - Movie
+      operationId: get movie
+      summary: Get all movies
+      description: Get all movies
       parameters:
-        - name: id
+        - name: id_movie
+          in : query
+          schema:
+            type: integer 
+        - name: movie_title
+          in : query
+          schema:
+            type: string  
+        - name: movie_producer
           in: query
-          schema :
-            type : integer
-          required : true
-      responses:
-        200:
-          description: Liste des salles
+          schema:
+            type: string
+        - name: movie_title
+          in: query
+          schema:
+            type: string     
+      responses: 
+        200: 
+          description: Here's all movies
           content:
             application/json:
-              schema:
+              schema: 
                 type: array
                 items:
-                  $ref: '#/components/schemas/Salle'
+                  $ref: '#/components/schemas/Movie'
+        400: 
+          description: Bad request
+    post: 
+      tags:
+        - Movie
+      operationId: add movie
+      summary: Add a new movie
+      description: Add a new movie
+      requestBody:
+        description: Movie to be added
+        content:
+          application/json:
+            schema:  
+              $ref: '#/components/schemas/AddMovie'
+        required: true
+      responses:
+        201:
+          description: Movie added
+          content:
+            application/json:
+              schema: 
+                type: array
+                items:
+                  $ref : '#/components/schemas/Movie'
         400:
           description: Bad request
-    post:
+    put:
       tags:
-        - Salle
-      operationId: createSAlle
-      summary : Ajouter un nouveau salle 
-      description: Ajouter un nouveau salle
-      requestBody:
-        description: nouveau salle
+        - Movie
+      summary: Change all movie's information
+      description: Change all movie's information
+      requestBody: 
+        description: Informations changed 
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateSalle'
-        required: true
+              $ref: '#/components/schemas/Movie'
       responses:
-        200:
-          description: Liste des salles  
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Salle'
-        400:
+        202: 
+          description: Informations changed
+        400: 
           description: Bad request
-  /salle/{id}:
-    get:
+        404:
+          description: Movie not found
+    patch:
       tags:
-        - Salle
-      operationId: getSalleId
-      summary: Get specified Salle
-      description: Get all salle with details
-      parameters:
-        - name: id
-          in: path
-          schema :
-            type : integer
-          required : true
+        - Movie
+      summary: Change movie's information
+      description: Change movie's information
+      requestBody: 
+        description: Change information
+        content :
+           application/json:
+            schema: 
+                $ref: '#/components/schemas/Movie'
+            examples:
+              changeTitle:
+                summary: change title
+                description: change title 
+                value: 
+                  title: "New title"
+                  id_movie: 14
+              changeDateSortie:
+                summary: change release date
+                description: change release date
+                value:
+                  release_date: "15-06-2023"
+                  id_movie: 2
       responses:
-        200:
-          description: List of SAlle
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Salle'
-        400:
+        202:
+          description: Information(s) changed
+        400: 
           description: Bad request
-
+        404:
+          description: Movie not found
     delete:
       tags:
-        - Salle
-      summary : Delete specified salle
-      description : Delete all or one salle
+        - Movie
+      summary : Delete movies
+      description: delete movies
       parameters:
-        - name : id
-          in: path
-          schema :
-            type : integer
-          required: true
+        - name: id_movie
+          in: query
+          schema: 
+            type: array
       responses:
         200:
-          description: Resources deleted
+          description: delete succesfully
         400:
           description: Bad request
+        404: 
+          description: Movie(s) not found
+  /movie/{id_movie}:
+    get: 
+      tags:
+        - Movie
+      summary: get movie
+      description: get movie by Id
+      parameters:
+        - name: id_movie
+          in: path
+          schema:
+            type: integer
+          required: true
+      responses:
+        200: 
+          description : Here's your student
+          content: 
+            application/json:
+                schema :
+                  type : array
+                  items :
+                    $ref: '#/components/schemas/Movie'
+        400 : 
+          description: Bad request
+        404 : 
+          description : Entity not found
+    delete :
+      tags :
+      - Movie
+      summary : Delete a movie
+      description : Delete a movie by id
+      parameters :
+      - name : id
+        in : path
+        schema :
+          type : integer
+        required: true
+      responses :
+        200 : 
+          description : Delete succesfully
+        400 : 
+          description : Bad request
+        404 : 
+          description : Entity not found
+  /movie/category:
+    get: 
+      tags:
+        - Movie
+      summary: get all movies's categories
+      description: get all movies's categories
+      parameters:
+        - name: id_category
+          in : query
+          schema:
+            type: integer 
+        - name: label
+          in : query
+          schema:
+            type: string  
+      responses:
+        200: 
+          description: All categories here
+          content:
+            application/json:
+              schema: 
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+        400: 
+          description: Bad request 
+  /movie/{category_label}:
+    get: 
+      tags:
+        - Movie 
+      summary: get all movies in a category
+      description: get all movies in a category 
+      parameters:
+        - name: category_label
+          in: path
+          schema: 
+            type: string
+          required: true 
+      responses:
+        200: 
+          description: Here's your movies
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Movie'
+        400: 
+          description: Bad request
+        404: 
+          description: Category not found
+  
   /projection:
     get:
       tags:
         - Projection
-      operationId: getProjection
-      summary: Avoir tous les projections en salles
-      description: Voir tous les projections avec détails
+      operationId: get broadcasting
+      summary: Get all broadcasting
+      description: Get all movies
       parameters:
-        - name: id
+        - name: id_braodcast
+          in : query
+          schema:
+            type: integer  
+        - name: broadcast_time
           in: query
-          schema :
-            type : integer
-          required : true
+          schema:
+            type: string
+            format: hour:min
+        - name: movie_title
+          in: query
+          schema:
+            type: string
+          
       responses:
-        200:
-          description: Liste des projection
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Projection'
-        400:
+        200: 
+          description: Here's all movies
+        400: 
           description: Bad request
-    post:
+    post: 
       tags:
         - Projection
-      operationId: createProjection
-      summary : Ajouter un nouveau Projection 
-      description: Ajouter un nouveau projection
+      operationId: add broadcast
+      summary: Add a new broadcasting
+      description: Add a new broadcasting
       requestBody:
-        description: nouveau projection
+        description: Broadcast to be added
+        content:
+          application/json:
+            schema:  
+              $ref: '#/components/schemas/CreateBroadcast'
+        required: true
+      responses:
+        201:
+          description: Broadcast added
+        400:
+          description: Bad request
+    put:
+      tags:
+        - Projection
+      summary: Change all broadcasting's information
+      description: Change all broadcasting's information
+      requestBody: 
+        description: Informations changed 
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateProjection'
-        required: true
+              $ref: '#/components/schemas/Broadcasting'
       responses:
-        200:
-          description: Liste des projections  
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Projection'
-        400:
+        202: 
+          description: Informations changed
+        400: 
           description: Bad request
-  /projection/{id}:
-    get:
+        404:
+          description: Broadcast not found
+    patch:
       tags:
         - Projection
-      operationId: getProjectionId
-      summary: Get specified projection
-      description: Get all projection with details
-      parameters:
-        - name: id
-          in: path
-          schema :
-            type : integer
-          required : true
-      responses:
-        200:
-          description: List of projection
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Projection'
-        400:
-          description: Bad request
-    patch :
-      tags :
-        - Projection 
-      summary : Update projection informations
-      description : Update projection informations
-      parameters:
-        - name: id
-          in: path
-          schema :
-            type : integer
-          required : true
-      requestBody : 
-        description : Update projection
+      summary: Change broadcasting's information
+      description: Change broadcasting's information
+      requestBody: 
+        description: Change information
         content :
-          application/json:
-            schema :
-              type : array
-              items : 
-                $ref: '#/components/schemas/Projection'
+           application/json:
+            schema: 
+                $ref: '#/components/schemas/Broadcasting'
             examples:
-              changeTitle : 
-                value : 
-                  id: 1
-                  title : "Titanic"
-              salleProjection:
+              changeTitle:
+                summary: change movie
+                description: change movie 
+                value: 
+                 movie_broadcast: {movie_title: "New title", id_movie: 14}
+                  
+              changeTime:
+                summary: change braodcasting time
+                description: change braodcastingTime
                 value:
-                  id: 1
-                  numéro_salle: "S2"
-              heureDiffusion :
-                value : 
-                  id : 1 
-                  heure_de_diffusion : "8H PM"
-      responses :
-        200 :
-          description : Update done
-          content :
-            application/json :
-              schema : 
-                $ref : '#/components/schemas/Projection'
-
+                  broadcasting_time: "15-06-2023"
+                  id_broadcast: 2
+              changeRoom:
+                summary: change broadcasting room
+                description: change broadcasting time
+                value:
+                  room_broadcast: {capacity: 200 ,  id: 3}
+      responses:
+        202:
+          description: Information(s) changed
+        400: 
+          description: Bad request
+        404:
+          description: Broadcast not found
     delete:
       tags:
         - Projection
-      summary : Delete specified projection
-      description : Delete all or one projection
+      summary : Delete broadcast
+      description: delete broadcast
       parameters:
-        - name : id
-          in: path
-          schema :
-            type : integer
+        - name: id_broadcast
+          in: query
+          schema: 
+            type: array
+      responses:
+        200:
+          description: delete succesfully
+        400:
+          description: Bad request
+        404: 
+          description: Broadcast(s) not found
+  /projection/{date}:
+    get: 
+      tags: 
+      - Projection
+      summary: Get all broadcasting in a week
+      description: Get all broadcasting in a week
+      parameters:
+        - name: date
+          in : path
+          schema: 
+            type: string 
+            format: date
           required: true
       responses:
-        200:
-          description: Resources deleted
-        400:
-          description: Bad request
-  /film_category/categorie?="action":
-    get:
-      tags:
-        - Category
-      operationId: getFilmbyCategorie
-      summary: Get film by categorie
-      description: Get all film with their category
-      parameters:
-        - name: categorie
-          in: query
-          schema :
-            type : string
-          required : true
-      responses:
-        200:
-          description: List of films with their category
+        200: 
+          description: Here all braodcasting
           content:
             application/json:
-              schema:
-                $ref: '#/components/schemas/Categorie'
-        400:
+              schema: 
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Calendar'
+        400: 
           description: Bad request
-
 components:
   schemas:
-    CreateFilm:
-      type: object
-      properties:
-        titre:
-          type: string
-          example: "Titanic"
-        Durée:
-          type: string
-          format: heure
-          example: "1H30"
-        Resumé :
-          type : string 
-          example : "L'histoire entre deux amants sur un bâteau..."
-        Realisateur : 
-          type : string 
-          example : "Warner Bros"
-        Date_de_sortie : 
-          type : string 
-          format : date 
-          example : "2002-04-14"
-    Film:
-      allOf:
-        - $ref: '#/components/schemas/CreateFilm'
+    Room:
       type: object
       properties:
         id:
           type: integer
           example: 1
-    CreateSalle:
+        capacity:
+          type: integer
+    AddMovie: 
       type: object
       properties:
-        numero:
+        title:
           type: string
-          example : "S2"
-        capacite_d_acceuil :
-          type: integer
-          example: 10000
-    Salle :
+          example: Jumanji
+        category: 
+          type: string
+          example: romance
+        duration:
+          type: string
+          format: time
+          example: "01:32:00"
+        resume:
+          type: string
+          example: "Lorem ipsum"
+        producer:
+          type: string
+          example: "Jean Dupont"
+        release_date:
+          type: string
+          format: date
+          example: "12-22-2022"
+    Movie: 
       allOf:
-        - $ref: '#/components/schemas/CreateSalle'
+        - $ref: '#/components/schemas/AddMovie'
       type: object
       properties:
-        id:
+        id_movie:
           type: integer
-          example : 1
+          example: 12
 
-    CreateProjection : 
-      type : object
-      properties : 
-        film : 
-          type : string 
-          example : "Titanic"
-        salle_de_projection : 
-          type : string
-          example : "S2"
-        heure_diffusion : 
-          type : string 
-          format: heure
-          example : "8H PM"
-    Projection : 
-      allOf : 
-        - $ref: '#/components/schemas/CreateProjection'
-      type : object
-      properties: 
+    CreateBroadcast:
+       type: object
+       properties:
+        movie_broadcast: 
+          allOf:
+            - $ref: '#/components/schemas/Movie'
+          type: object
+        room_broadcast:
+          allOf:
+            - $ref: '#/components/schemas/Room'
+        broadcast_time:
+          type: string
+          format: date- time     
+    Broadcasting:
+      allOf:
+        - $ref: '#/components/schemas/CreateBroadcast'
+      properties:
+        id_braodcast:
+          type: integer
+    Category:
+      type: object
+      properties:
         id: 
-          type : integer
-          example : 1
-    Categorie :
-      type : object
-      properties : 
-        categorie :
-          type : string
-          example : "action"
-        liste_de_film :
-          example : 
-              film1 :
-                titre:
-                  - $ref: '#/components/schemas/CreateFilm/properties/titre/example'
-                id :
-                  - $ref: '#/components/schemas/Film/properties/id/example'
-                durée :
-                   - $ref: '#/components/schemas/CreateFilm/properties/Durée/example'
-                resumé : 
-                   - $ref: '#/components/schemas/CreateFilm/properties/Resumé/example'
-                realisateur : 
-                   - $ref: '#/components/schemas/CreateFilm/properties/Realisateur/example'
-
-          
-        
-        
-      
+          type: integer
+        label: 
+          type: string
+    Calendar: 
+      oneOf:
+        - $ref: '#/components/schemas/Broadcasting'   
+        - $ref: '#/components/schemas/Broadcasting'   
+        - $ref: '#/components/schemas/Broadcasting'
